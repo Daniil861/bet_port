@@ -593,7 +593,9 @@
     const config = {
         number_program: 0,
         count_win: 0,
-        current_coeff: 1
+        current_coeff: 1,
+        count_delay_animation: 0,
+        timerId: false
     };
     const coefficient = {
         item_1: 1.2,
@@ -614,20 +616,25 @@
         return array;
     }
     function get_number_program() {
-        let arr = [ 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9 ];
+        let arr = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9 ];
         let new_arr = shuffle(arr);
         let number = get_random(0, 31);
         return new_arr[number];
     }
     function start_game() {
+        add_remove_className(".bets__button", "_hold");
         config.number_program = get_number_program();
-        chek_win();
-        console.log(`config.current_coeff - ${config.current_coeff}`);
-        console.log(`config.count_win - ${config.count_win}`);
-        write_win_count();
+        console.log(`Запустили игру, определили номер выигрышного окна (config.number_program) - ${config.number_program}`);
+        get_anim_item();
         setTimeout((() => {
-            document.querySelector(".win").classList.add("_active");
-        }), 1e3);
+            chek_win();
+            console.log(`config.current_coeff - ${config.current_coeff}`);
+            console.log(`config.count_win - ${config.count_win}`);
+            write_win_count();
+            setTimeout((() => {
+                document.querySelector(".win").classList.add("_active");
+            }), 1e3);
+        }), config.count_delay_animation + 500);
     }
     function chek_win() {
         let bet = +sessionStorage.getItem("current-bet");
@@ -679,12 +686,36 @@
         } else return false;
     }
     function show_active_item(number) {
+        console.log("Добавляем подсветку выигрышного окна");
         add_remove_className(`.field__item_${number}`, "_active");
         add_remove_className(`.values__item_${number}`, "_active");
     }
     function write_win_count() {
         document.querySelector(".win__multiple").textContent = config.current_coeff;
         document.querySelector(".win__text").textContent = config.count_win;
+    }
+    function get_anim_item() {
+        let timer = get_random(2500, 4e3);
+        config.count_delay_animation = timer;
+        console.log(`Запустили анимацию блоков, время анимации (config.count_delay_animation)- ${config.count_delay_animation}`);
+        config.timerId = setInterval((() => {
+            console.log("SETINTERVAL work");
+            setTimeout((() => {
+                clearInterval(config.timerId);
+            }), config.count_delay_animation);
+            console.log(`Анимация будет повторяться ${config.count_delay_animation} сек`);
+            get_random_item();
+        }), 210);
+    }
+    function get_random_item() {
+        console.log(`Запустили функцию определения случайного блока для присвоения класса _active`);
+        let number = get_random(0, 9);
+        console.log(`Случайны блок - №${number}`);
+        let items = document.querySelectorAll(".field__item");
+        items[number].classList.add("_active");
+        setTimeout((() => {
+            items[number].classList.remove("_active");
+        }), 200);
     }
     document.addEventListener("click", (e => {
         let targetElement = e.target;
@@ -716,6 +747,9 @@
         if (targetElement.closest(".bets__button")) start_game();
         if (targetElement.closest(".win__button")) {
             document.querySelector(".win").classList.remove("_active");
+            setTimeout((() => {
+                add_remove_className(".bets__button", "_hold");
+            }), 1e3);
             document.querySelectorAll(".field__item").forEach((el => {
                 if (el.classList.contains("_active")) el.classList.remove("_active");
             }));

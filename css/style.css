@@ -217,15 +217,6 @@ body._hold {
   line-height: 1.1875;
   color: #ffffff;
 }
-.bank__count._no-money {
-  animation: no-money 0.5s ease 2;
-}
-.bank__count._delete-money {
-  animation: delete-money 0.5s ease;
-}
-.bank__count._anim-add-money {
-  animation: add-money 0.5s ease 2;
-}
 
 .block-bet {
   width: 100%;
@@ -339,6 +330,16 @@ body._hold {
   z-index: 10;
 }
 
+.check._no-money {
+  animation: no-money 0.5s ease 2;
+}
+.check._delete-money {
+  animation: delete-money 0.5s ease;
+}
+.check._anim-add-money {
+  animation: add-money 0.5s ease 2;
+}
+
 .slotMachineNoTransition {
   -webkit-transition: none !important;
   -o-transition: none !important;
@@ -386,12 +387,25 @@ body._hold {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 .main__button-game {
   width: 7.5rem;
   height: 3.4375rem;
   background: url("../img/icons/btn-play.png") center/contain no-repeat;
 }
+.main__game-ball {
+  position: absolute;
+  bottom: 3.125rem;
+  right: -2.5rem;
+  animation: jump_ball 7s ease infinite;
+}
+@media (max-width: 37.5em) {
+  .main__game-ball img {
+    max-width: 70%;
+  }
+}
+
 .balance {
   background: linear-gradient(270.96deg, #030000 -2.38%, #00092e 106.78%);
   display: flex;
@@ -507,21 +521,17 @@ body._hold {
   height: 100%;
   position: relative;
   top: -1.4375rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .controls-game__text {
-  position: absolute;
-  top: 2.8125rem;
-  left: 50%;
-  transform: translate(-50%);
   font-size: 0.75rem;
   line-height: 1.25;
   color: #ffffff;
 }
 .controls-game__coins {
-  position: absolute;
-  top: 3.75rem;
-  left: 50%;
-  transform: translate(-50%);
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.2142857143;
@@ -670,6 +680,10 @@ body._hold {
 .bets__button:active {
   transform: scale(0.97);
 }
+.bets__button._hold {
+  pointer-events: none;
+  opacity: 0.5;
+}
 .bets__bank {
   width: 100%;
 }
@@ -754,5 +768,34 @@ body._hold {
   100% {
     color: yellow;
     transform: translateY(-3px);
+  }
+}
+@keyframes jump_ball {
+  0%, 84% {
+    transform: translateY(0);
+  }
+  87% {
+    transform: translateY(-120px);
+  }
+  88% {
+    transform: translateY(0px);
+  }
+  90% {
+    transform: translateY(-60px);
+  }
+  91% {
+    transform: translateY(0px);
+  }
+  93% {
+    transform: translateY(-20px);
+  }
+  94% {
+    transform: translateY(0px);
+  }
+  96% {
+    transform: translateY(-5px);
+  }
+  97% {
+    transform: translateY(0px);
   }
 }
