@@ -347,7 +347,7 @@ body._hold {
 }
 
 .slotMachineBlurFast {
-  transition: all 0.1s ease 0.3s;
+  transition: all 0.1s ease;
   -webkit-filter: blur(5px);
   filter: blur(5px);
 }
@@ -376,6 +376,21 @@ body._hold {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
 }
+.main__body._active .main__game_1 img {
+  animation: show_item_y 0.3s ease-out 0.6s forwards;
+}
+.main__body._active .main__button-game_1 {
+  animation: show_item_y 0.3s ease-out 0.6s forwards;
+}
+.main__body._active .main__game_2 img {
+  animation: show_item_y 0.3s ease-out 1s forwards;
+}
+.main__body._active .main__button-game_2 {
+  animation: show_item_y 0.3s ease-out 1s forwards;
+}
+.main__body._active .balance__body {
+  animation: show_item_x 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.3s forwards;
+}
 .main__buttons {
   background: url("../img/main/bg-main.jpg") left/cover no-repeat;
   display: flex;
@@ -389,20 +404,54 @@ body._hold {
   align-items: center;
   position: relative;
 }
+.main__game img {
+  position: relative;
+}
+.main__game_1 img {
+  top: -31.25rem;
+  opacity: 0;
+}
+.main__game_2 img {
+  top: -31.25rem;
+  opacity: 0;
+}
 .main__button-game {
   width: 7.5rem;
   height: 3.4375rem;
   background: url("../img/icons/btn-play.png") center/contain no-repeat;
+  position: relative;
+}
+.main__button-game_1 {
+  top: 31.25rem;
+  opacity: 0;
+}
+.main__button-game_2 {
+  top: 31.25rem;
+  opacity: 0;
 }
 .main__game-ball {
   position: absolute;
   bottom: 3.125rem;
-  right: -2.5rem;
   animation: jump_ball 7s ease infinite;
 }
-@media (max-width: 37.5em) {
+@supports (right: clamp( -2.5rem , 3.125rem  +  -10vw , -0.3125rem )) {
+  .main__game-ball {
+    right: clamp( -2.5rem , 3.125rem  +  -10vw , -0.3125rem );
+  }
+}
+@supports not (right: clamp( -2.5rem , 3.125rem  +  -10vw , -0.3125rem )) {
+  .main__game-ball {
+    right: calc(-0.3125rem + -2.1875 * (100vw - 34.375rem) / 21.875);
+  }
+}
+@supports (max-width: clamp( 3.75rem , -1.1607142857rem  +  14.2857142857vw , 6.875rem )) {
   .main__game-ball img {
-    max-width: 70%;
+    max-width: clamp( 3.75rem , -1.1607142857rem  +  14.2857142857vw , 6.875rem );
+  }
+}
+@supports not (max-width: clamp( 3.75rem , -1.1607142857rem  +  14.2857142857vw , 6.875rem )) {
+  .main__game-ball img {
+    max-width: calc(3.75rem + 3.125 * (100vw - 34.375rem) / 21.875);
   }
 }
 
@@ -418,6 +467,9 @@ body._hold {
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  position: relative;
+  left: 31.25rem;
 }
 .balance__text {
   margin-bottom: 0.3125rem;
@@ -439,6 +491,12 @@ body._hold {
 .slot__body {
   min-height: 100vh;
   position: relative;
+}
+.slot__body._active .slot__cont {
+  animation: show_item_x 0.3s ease 1.1s forwards;
+}
+.slot__body._active .slot__controls {
+  animation: show_item_y 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards;
 }
 .slot__game {
   display: flex;
@@ -464,6 +522,8 @@ body._hold {
   position: relative;
   padding: 0 8px;
   overflow: hidden;
+  transform: translateX(-50px);
+  opacity: 0;
 }
 .slot__column {
   flex: 0 1 33.333%;
@@ -485,6 +545,9 @@ body._hold {
 }
 .slot__controls {
   margin: 0 auto;
+  position: relative;
+  top: 31.25rem;
+  opacity: 0;
 }
 
 .controls-game__body {
@@ -571,14 +634,29 @@ body._hold {
   grid-template-columns: 2fr 0.5fr 1.5fr;
   column-gap: 0.3125rem;
 }
+.game__body._active .game__field {
+  animation: show_item_x 0.3s ease 1.2s forwards;
+}
+.game__body._active .game__values {
+  animation: show_item_y 0.3s ease 0.9s forwards;
+}
+.game__body._active .game__bets {
+  animation: show_item_x 0.3s ease 0.6s forwards;
+}
 .game__field {
   margin: 0.625rem;
+  transform: translateX(-50px);
+  opacity: 0;
 }
 .game__values {
   margin: 0.625rem 0;
+  transform: translateY(-50px);
+  opacity: 0;
 }
 .game__bets {
   margin: 0.625rem;
+  transform: translateX(50px);
+  opacity: 0;
 }
 
 .field__body {
@@ -611,7 +689,7 @@ body._hold {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(139, 52, 55, 0.5);
+  background-color: rgba(139, 52, 55, 0.7);
   opacity: 0;
   visibility: hidden;
 }
@@ -691,23 +769,22 @@ body._hold {
 .win {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+  left: 30%;
+  transform: translate(-50%, -50%);
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.7);
   visibility: hidden;
-  width: 70%;
-  min-height: 85%;
+  width: 100%;
+  min-height: 100%;
   z-index: 9;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: all 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s;
-  border-radius: 20px;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s;
 }
 .win._active {
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
   opacity: 1;
@@ -771,31 +848,48 @@ body._hold {
   }
 }
 @keyframes jump_ball {
-  0%, 84% {
+  0%, 80% {
     transform: translateY(0);
   }
-  87% {
-    transform: translateY(-120px);
+  83% {
+    transform: translate(-1px, -120px) rotate(-10deg);
   }
-  88% {
-    transform: translateY(0px);
+  84% {
+    transform: translate(-3px, 0px) rotate(-20deg);
+  }
+  86% {
+    transform: translate(-4px, -60px) rotate(-30deg);
+  }
+  87% {
+    transform: translate(-6px, 0px) rotate(-40deg);
+  }
+  89% {
+    transform: translate(-7px, -20px) rotate(-50deg);
   }
   90% {
-    transform: translateY(-60px);
+    transform: translate(-9px, 0px) rotate(-60deg);
   }
-  91% {
-    transform: translateY(0px);
+  92% {
+    transform: translate(-10px, -5px) rotate(-70deg);
   }
   93% {
-    transform: translateY(-20px);
+    transform: translate(-12px, 0px) rotate(-80deg);
   }
-  94% {
-    transform: translateY(0px);
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
   }
-  96% {
-    transform: translateY(-5px);
+}
+@keyframes show_item_y {
+  100% {
+    transform: translateY(0);
+    top: 0;
+    opacity: 1;
   }
-  97% {
-    transform: translateY(0px);
+}
+@keyframes show_item_x {
+  100% {
+    transform: translateX(0);
+    left: 0;
+    opacity: 1;
   }
 }
