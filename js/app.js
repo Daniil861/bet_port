@@ -463,6 +463,8 @@
             document.querySelectorAll(block).forEach((el => el.classList.remove("_anim-add-money")));
         }), delay_off);
     }
+    if (document.querySelector(".main__body") && document.querySelector(".preloader").classList.contains("_hide")) document.querySelector(".main__body").classList.add("_active");
+    if (document.querySelector(".slot__body") && document.querySelector(".preloader").classList.contains("_hide")) document.querySelector(".slot__body").classList.add("_active");
     var minTime = 1e3;
     var maxTime = 2500;
     var casino1 = document.querySelector("#slot1");
@@ -590,6 +592,7 @@
             }
         }));
     }
+    if (document.querySelector(".game__body") && document.querySelector(".preloader").classList.contains("_hide")) document.querySelector(".game__body").classList.add("_active");
     const config = {
         number_program: 0,
         count_win: 0,
@@ -616,7 +619,7 @@
         return array;
     }
     function get_number_program() {
-        let arr = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9 ];
+        let arr = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 8, 9 ];
         let new_arr = shuffle(arr);
         let number = get_random(0, 31);
         return new_arr[number];
@@ -624,12 +627,9 @@
     function start_game() {
         add_remove_className(".bets__button", "_hold");
         config.number_program = get_number_program();
-        console.log(`Запустили игру, определили номер выигрышного окна (config.number_program) - ${config.number_program}`);
         get_anim_item();
         setTimeout((() => {
             chek_win();
-            console.log(`config.current_coeff - ${config.current_coeff}`);
-            console.log(`config.count_win - ${config.count_win}`);
             write_win_count();
             setTimeout((() => {
                 document.querySelector(".win").classList.add("_active");
@@ -686,31 +686,25 @@
         } else return false;
     }
     function show_active_item(number) {
-        console.log("Добавляем подсветку выигрышного окна");
         add_remove_className(`.field__item_${number}`, "_active");
         add_remove_className(`.values__item_${number}`, "_active");
     }
     function write_win_count() {
-        document.querySelector(".win__multiple").textContent = config.current_coeff;
+        document.querySelector(".win__multiple").textContent = `x${config.current_coeff}`;
         document.querySelector(".win__text").textContent = config.count_win;
     }
     function get_anim_item() {
         let timer = get_random(2500, 4e3);
         config.count_delay_animation = timer;
-        console.log(`Запустили анимацию блоков, время анимации (config.count_delay_animation)- ${config.count_delay_animation}`);
         config.timerId = setInterval((() => {
-            console.log("SETINTERVAL work");
             setTimeout((() => {
                 clearInterval(config.timerId);
             }), config.count_delay_animation);
-            console.log(`Анимация будет повторяться ${config.count_delay_animation} сек`);
             get_random_item();
         }), 210);
     }
     function get_random_item() {
-        console.log(`Запустили функцию определения случайного блока для присвоения класса _active`);
         let number = get_random(0, 9);
-        console.log(`Случайны блок - №${number}`);
         let items = document.querySelectorAll(".field__item");
         items[number].classList.add("_active");
         setTimeout((() => {
@@ -723,6 +717,7 @@
             sessionStorage.setItem("preloader", true);
             preloader.classList.add("_hide");
             wrapper.classList.add("_visible");
+            if (document.querySelector(".main__body") && document.querySelector(".preloader").classList.contains("_hide")) document.querySelector(".main__body").classList.add("_active");
         }
         if (targetElement.closest(".block-bet__minus")) {
             let current_bet = +sessionStorage.getItem("current-bet");
